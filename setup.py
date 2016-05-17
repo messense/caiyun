@@ -38,7 +38,8 @@ with open('requirements.txt') as f:
 setup(
     name='caiyun',
     version='0.1.0',
-    author='Messense Lv <messense@icloud.com>',
+    author='Messense Lv',
+    author_email='messense@icloud.com',
     packages=find_packages(exclude=['tests']),
     keywords='zimuzu,baidu',
     description='Zimuzu resources to Baidu Yun Pan',
