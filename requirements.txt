@@ -1,0 +1,4 @@
+click
+baidupcsapi
+lxml
+requests
