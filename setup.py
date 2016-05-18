@@ -40,6 +40,7 @@ setup(
     version='0.1.1',
     author='Messense Lv',
     author_email='messense@icloud.com',
+    url='https://github.com/messense/caiyun',
     packages=find_packages(exclude=['tests']),
     keywords='zimuzu,baidu',
     description='Zimuzu resources to Baidu Yun Pan',
