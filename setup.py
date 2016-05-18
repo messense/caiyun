@@ -37,7 +37,7 @@ with open('requirements.txt') as f:
 
 setup(
     name='caiyun',
-    version='0.1.0',
+    version='0.1.1',
     author='Messense Lv',
     author_email='messense@icloud.com',
     packages=find_packages(exclude=['tests']),
