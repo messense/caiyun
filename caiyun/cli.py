@@ -44,7 +44,7 @@ Resource = collections.namedtuple('Resource', ['name', 'url'])
               '--type',
               default='ed2k',
               show_default=True,
-              help='资源类型')
+              help=u'资源类型')
 @click.option('-p',
               '--path',
               default=u'/我的视频',
@@ -52,7 +52,10 @@ Resource = collections.namedtuple('Resource', ['name', 'url'])
               help=u'百度云下载路径')
 def main(url, zimuzu_username, zimuzu_password, baidu_username,
          baidu_password, format, type, path):
-    u"""字幕组资源下载至百度云盘"""
+    u"""字幕组资源下载至百度云盘
+
+    URL: 字幕组资源下载页面地址
+    """
     zimuzu_login(zimuzu_username, zimuzu_password)
     res = session.get(url)
     try:
