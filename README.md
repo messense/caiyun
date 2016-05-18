@@ -1,4 +1,5 @@
 # caiyun
+
 字幕组资源离线下载至百度云盘
 
 ## 安装
@@ -11,6 +12,26 @@ $ pip install -U caiyun
 
 ```bash
 $ caiyun --help
+```
+
+```
+Usage: caiyun [OPTIONS] URL
+
+  字幕组资源下载至百度云盘
+
+  URL: 字幕组资源下载页面地址
+
+Options:
+  --version                       Show the version and exit.
+  --zimuzu-username TEXT          字幕组用户名  [required]
+  --zimuzu-password TEXT          字幕组密码  [required]
+  --baidu-username TEXT           百度云盘用户名  [required]
+  --baidu-password TEXT           百度云盘密码  [required]
+  -f, --format [HR-HDTV|MP4|HDTV|720P|1080P|WEB-DL|BD-720P|BD-1080P]
+                                  资源格式  [default: HR-HDTV]
+  -t, --type [ed2k|magnet]        资源类型  [default: ed2k]
+  -p, --path TEXT                 百度云下载路径  [default: /我的视频]
+  -h, --help                      Show this message and exit.
 ```
 
 ## License

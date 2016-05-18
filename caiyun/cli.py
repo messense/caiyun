@@ -19,8 +19,10 @@ headers = {
 }
 Resource = collections.namedtuple('Resource', ['name', 'url'])
 
+CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
-@click.command()
+
+@click.command(context_settings=CONTEXT_SETTINGS)
 @click.version_option(version=caiyun.__version__)
 @click.argument('url', nargs=1)
 @click.option('--zimuzu-username',
@@ -37,11 +39,13 @@ Resource = collections.namedtuple('Resource', ['name', 'url'])
               help=u'百度云盘密码')
 @click.option('-f',
               '--format',
+              type=click.Choice(['HR-HDTV', 'MP4', 'HDTV', '720P', '1080P', 'WEB-DL', 'BD-720P', 'BD-1080P']),
               default='HR-HDTV',
               show_default=True,
               help=u'资源格式')
 @click.option('-t',
               '--type',
+              type=click.Choice(['ed2k', 'magnet']),
               default='ed2k',
               show_default=True,
               help=u'资源类型')
