@@ -82,19 +82,45 @@ def main(url, zimuzu_username, zimuzu_password, baidu_username,
     failure_count = 0
     seasons = season.split(',') if season else []
     resources = parse_resources(res.text, format, type, seasons)
+    resources_by_season = collections.defaultdict(list)
+    for resource in resources:
+        resources_by_season[resource.season].append(resource)
+
+    if not resources_by_season:
+        click.echo(u'未找到任何资源！', err=True)
+        return
+
     pcs = baidupcsapi.PCS(baidu_username, baidu_password.encode('utf-8'))
     if not path.startswith(u'/'):
         path = u'/{}'.format(path)
-    for resource in resources:
-        file_path = os.path.join(path, resource.name)
-        try:
-            pcs.add_download_task(resource.url, file_path)
-        except (baidupcsapi.api.LoginFailed, baidupcsapi.api.CancelledError):
-            failure_count += 1
-            click.echo(u'添加下载任务失败：{}'.format(resource.name), err=True)
+
+    for season, episodes in resources_by_season.items():
+        if not season or season == '0':
+            save_dir = path
         else:
-            success_count += 1
-            click.echo(u'添加下载任务成功：{}'.format(resource.name))
+            save_dir = os.path.join(path, 'Season {}'.format(season))
+
+        try:
+            mkdirs(pcs, save_dir)
+        except (baidupcsapi.api.LoginFailed, baidupcsapi.api.CancelledError):
+            click.echo(u'创建文件夹[{}]失败！'.format(save_dir), err=True)
+
+        res = pcs.list_files(save_dir).json()
+        downloaded = {item['server_filename'] for item in res.get('list', [])}
+
+        for episode in episodes:
+            if episode.name in downloaded:
+                continue
+
+            file_path = os.path.join(save_dir, episode.name)
+            try:
+                pcs.add_download_task(episode.url, file_path)
+            except (baidupcsapi.api.LoginFailed, baidupcsapi.api.CancelledError):
+                failure_count += 1
+                click.echo(u'添加下载任务失败：{}'.format(episode.name), err=True)
+            else:
+                success_count += 1
+                click.echo(u'添加下载任务成功：{}'.format(episode.name))
 
     click.echo(u'成功：{}个，失败：{}个。'.format(success_count, failure_count))
 
@@ -159,3 +185,23 @@ def parse_resources(source, format, type, seasons):
             season=season,
             episode=episode,
         )
+
+
+def mkdirs(pcs, dir):
+    dir = dir.strip()
+    if dir == u'/':
+        return
+
+    dirs = dir.split(os.path.sep)
+
+    curr_dir = u'/'
+    for part in dirs:
+        if not part:
+            continue
+        curr_dir = os.path.join(curr_dir, part)
+        parent_dir_files = pcs.list_files(os.path.dirname(curr_dir)).json()
+        existing_dirs = {x['path'] for x in parent_dir_files.get('list', []) if x['isdir']}
+        if curr_dir in existing_dirs:
+            continue
+
+        pcs.mkdir(curr_dir)
