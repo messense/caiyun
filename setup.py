@@ -37,7 +37,7 @@ with open('requirements.txt') as f:
 
 setup(
     name='caiyun',
-    version='0.1.2',
+    version='0.1.3',
     author='Messense Lv',
     author_email='messense@icloud.com',
     url='https://github.com/messense/caiyun',
